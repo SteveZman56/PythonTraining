@@ -1,0 +1,73 @@
+"""Blackjack, by Al Sweigert al@inventwithpython.com
+the classic card game also known as 21. (this version doesn't have
+splitting or insurance.)
+More info at: https://en.wikipedia.org/wiki/blackjack
+View this code at https://nostarch.com/big-book-small-python-projects
+Tags: large, game, card game"""
+
+import random, sys
+
+# set up constants:
+HEARTS   = chr(9829) # character code for 'Heart'
+DIAMONDS = chr(9830) # character code for 'Diamond'
+SPADES   = chr(9824) # character code for 'Spade'
+CLUBS    = chr(9827) # character code for 'Club'
+# A list of chr codes can be found at https://inventwithpython.com/charactermap
+BACKSIDE = 'backside'
+
+
+def main():
+    print('''Blackjack, by Al Sweigert al@inventwithpython.com
+    
+    Rules:
+      Try to get as close to 21 without going over.
+      Kings, Queens and Jacks are worth 10 points.
+      Aces are worth 1 or 11 points.
+      Cards 2 through 10 are worth their face value.
+      (H)it to take another card.
+      (S)tand to stop taking cards.
+      On your first play, you can (D)ouble down to increase your bet
+      but must hit exactly one more time before standing.
+      In case of a tie, the bet is returned to the player.
+      The dealer stops hitting at 17.''')
+
+    money = 5000
+    while True: # Main game loop.
+        # check if player has run out of money:
+        if money <= 0:
+            print("you're Broke!")
+            print("Good thing you weren't playing with real money.")
+            print('Thanks for playing!')
+            sys.exit
+
+        # Let the player enter their bet for this round:
+        print('Money:', money)
+        bet = getBet(money)
+
+        # Give the dealer and the player two cards from the deck each:
+        deck = getDeck()
+        dealerHand = [deck.pop(), deck.pop()]
+        playerHand = [deck.pop(), deck.pop()]
+
+        # handle players actions:
+        print('Bet:', bet)
+        while True: # Keep looping until player stands or busts.
+            displayHands(playerHand,dealerHand, False)
+            print()
+
+            # check if the player has busted:
+            if getHandValue(playerHand) > 21:
+                break
+
+        # get the players move, either H, S or D:
+        move = getMove(playerHand, money - bet)
+
+        # Handle the player actions:
+        if move == 'D':
+            # player is doubling down, they can increase their bet:
+            additionalBet = getBet(min(bet, (money -bet)))
+            bet += additionalBet
+            print('Bet increased to {}.'.format(bet))
+            print('Bet: ', bet)
+            
+
