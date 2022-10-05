@@ -21,7 +21,7 @@ def getBirthdays(numberOfBirthdays):
         birthdays.append(birthday)
     return birthdays
 
-def getMatch(birthdays):
+def getMatch(birthdays): 
     """Returns the date object of a birthday that occurs more than once
     in the birthdays list"""
     if len(birthdays) == len(set(birthdays)):
